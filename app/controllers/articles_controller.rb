@@ -18,10 +18,15 @@ class ArticlesController < ApplicationController
   end
 
   def create
-    @article = Article.find(params[:article_id])
-    @comment = @article.comments.create(comment_params)
-    redirect_to article_path(@article)
+    @article = Article.new(article_params)
+    if @article.save
+      redirect_to @article
+    else
+      render 'new'
+    # @comment = @article.comments.create(comment_params)
+    # redirect_to article_path(@article)
   end
+end
   def destroy
     @article = Article.find(params[:article_id])
     @comment = @article.comments.find(params[:id])
@@ -47,7 +52,7 @@ class ArticlesController < ApplicationController
   end
 
   private
-    def comment_params
-      params.require(:comment).permit(:commenter, :body)
+    def article_params
+      params.require(:article).permit(:title, :text)
     end
 end
